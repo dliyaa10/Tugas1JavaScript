@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tugas 2 - Javascript</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            padding: 40px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ccc;
+            padding: 12px;
+            text-align: center;
+        }
+
+        thead {
+            background-color: #333;
+            color: white;
+        }
+
+        tfoot {
+            background-color: #eee;
+            font-weight: bold;
+        }
+
+        .total {
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Data Gaji Pegawai</h1>
+
+    <table>
+
+        <!-- JUDUL KOLOM -->
+        <thead>
+            <tr>
+                <th>Nama Pegawai</th>
+                <th>Umur</th>
+                <th>Jabatan</th>
+                <th>Status</th>
+                <th>Gaji Pokok</th>
+                <th>Tunjangan Jabatan</th>
+                <th>BPJS</th>
+                <th>Tunjangan Keluarga</th>
+                <th>Total Gaji</th>
+            </tr>
+        </thead>
+
+        <!-- DATA PEGAWAI -->
+        <tbody id="dataPegawai">
+        </tbody>
+
+        <!-- TOTAL -->
+        <tfoot>
+            <tr>
+                <td colspan="8">Total Gaji</td>
+                <td id="totalGaji" class="total"></td>
+            </tr>
+        </tfoot>
+
+    </table>
+
+</div>
+
+<script>
+
+    // Data pegawai
+    const pegawai = {
+        nama: "Dodi Prayudi",
+        umur: 25,
+        jabatan: "Manajer",
+        status: "Menikah"
+    };
+
+    // Menentukan gaji pokok berdasarkan jabatan
+    let gajiPokok;
+
+    if (pegawai.jabatan === "Manajer") {
+        gajiPokok = 15000000;
+    } else if (pegawai.jabatan === "Asisten Manajer") {
+        gajiPokok = 10000000;
+    } else if (pegawai.jabatan === "Staff") {
+        gajiPokok = 5000000;
+    }
+
+    // Tunjangan jabatan = 15% dari gaji pokok
+    const tunjanganJabatan = gajiPokok * 15 / 100;
+
+    // BPJS = 10% dari gaji pokok
+    const bpjs = gajiPokok * 10 / 100;
+
+    // Tunjangan keluarga
+    // Jika sudah menikah = 20% dari gaji pokok
+    let tunjanganKeluarga = 0;
+
+    if (pegawai.status === "Menikah") {
+        tunjanganKeluarga = gajiPokok * 20 / 100;
+    }
+
+    // Total gaji
+    const totalGaji =
+        gajiPokok +
+        tunjanganJabatan +
+        bpjs +
+        tunjanganKeluarga;
+
+    // Fungsi format rupiah
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR",
+            maximumFractionDigits: 0
+        }).format(angka);
+    }
+
+    // Menampilkan data ke dalam tbody
+    document.getElementById("dataPegawai").innerHTML = `
+        <tr>
+            <td>${pegawai.nama}</td>
+            <td>${pegawai.umur} tahun</td>
+            <td>${pegawai.jabatan}</td>
+            <td>${pegawai.status}</td>
+            <td>${formatRupiah(gajiPokok)}</td>
+            <td>${formatRupiah(tunjanganJabatan)}</td>
+            <td>${formatRupiah(bpjs)}</td>
+            <td>${formatRupiah(tunjanganKeluarga)}</td>
+            <td>${formatRupiah(totalGaji)}</td>
+        </tr>
+    `;
+
+    // Menampilkan total gaji pada tfoot
+    document.getElementById("totalGaji").innerHTML =
+        formatRupiah(totalGaji);
+
+</script>
+
+</body>
+</html>
